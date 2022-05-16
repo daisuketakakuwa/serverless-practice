@@ -1,0 +1,4 @@
+.build
+node_modules
+tests/resources/local-bucket
+docker/db/data

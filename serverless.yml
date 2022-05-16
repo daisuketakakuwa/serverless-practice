@@ -1,0 +1,50 @@
+# Lambda関数/CloudFormationの名前の一部となる
+service: serverless-practice
+
+frameworkVersion: "3"
+
+# プロバイダ(AWS/GCP/Azure)関連の設定
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ${opt:region, 'us-east-1'}
+  stage: ${opt:stage, 'offline'}
+  endpointType: private
+  # role used for executing our lambda (Lambda→S3となるように設定が必要かな？)
+  # role:
+  # 各JSファイルからprocess.env.XXXXで参照できるうようにする
+  environment: ${file(serverless-config/env/env.${self:provider.stage}.yml)}
+
+plugins:
+  # ローカル環境でLambda動作確認用
+  - serverless-offline-lambda
+  - serverless-offline
+  # ローカル環境でS3動作確認用
+  - serverless-s3-local
+  # ---.tsをコンパイル対象にする
+  - serverless-plugin-typescript
+
+custom:
+  # serverless-s3-local用の情報
+  # ./tmpで http://localhosst:4568 でS3をホストする
+  s3:
+    host: localhost
+    port: 4569
+    directory: ./tests/resources
+
+# sls offline start, sls deploy時にS3バケットを作成する。
+resources:
+  Resources:
+    NewResource:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: local-bucket
+
+# Lambda関数
+functions:
+  csvRead:
+    handler: src/functions/csvRead/handler.run
+    events:
+      - s3:
+          bucket: local-bucket
+          event: s3:ObjectCreated:*

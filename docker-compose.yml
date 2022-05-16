@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:latest
+    container_name: serverless-practice-db
+    environment:
+      MYSQL_DATABASE: serverlessPracticeDb
+      MYSQL_ROOT_PASSWORD: passw@rd
+      TZ: "Asia/Tokyo"
+    volumes:
+      - ./docker/db/data:/var/lib/mysql
+      - ./docker/db:/tmp/db
+      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+    ports:
+      - 3309:3306
