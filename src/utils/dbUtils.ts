@@ -1,5 +1,5 @@
-import mysql from "promise-mysql";
 import BlueBird from "bluebird";
+import mysql from "promise-mysql";
 
 export async function createDbConnection(): Promise<BlueBird<mysql.Connection>> {
   return mysql.createConnection({

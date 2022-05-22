@@ -1,10 +1,10 @@
+import { cargo } from "async";
 import { S3Event } from "aws-lambda";
-import { Parser, parse } from "csv-parse";
+import { parse, Parser } from "csv-parse";
 import iconv from "iconv-lite";
 import mysql from "promise-mysql";
-import { cargo } from "async";
-import { getObjectReadStream } from "../../utils/s3Client";
 import { createDbConnection } from "../../utils/dbUtils";
+import { getObjectReadStream } from "../../utils/s3Client";
 
 export const run = async (event: S3Event) => {
   if (!event.Records || event.Records.length == 0) {
