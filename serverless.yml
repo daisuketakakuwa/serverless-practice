@@ -43,7 +43,7 @@ resources:
 # Lambda関数
 functions:
   csvRead:
-    handler: src/functions/csvRead/handler.run
+    handler: src/functions/csvRead/csvReadHandler.runner
     events:
       - s3:
           bucket: local-bucket
